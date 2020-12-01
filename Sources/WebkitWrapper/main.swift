@@ -108,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let historyMenu = NSMenuItem()
     historyMenu.submenu = NSMenu(title: "History")
     historyMenu.submenu?.items = [
-      NSMenuItem(title: "Home", action: #selector(WKWebView.goHome(_:)), keyEquivalent: "h"),
+      NSMenuItem(title: "Home", action: #selector(WKWebView.goHome(_:)), keyEquivalent: "H"),
       NSMenuItem(title: "Back", action: #selector(WKWebView.goBack(_:)), keyEquivalent: "["),
       NSMenuItem(title: "Forward", action: #selector(WKWebView.goForward(_:)), keyEquivalent: "]"),
       NSMenuItem.separator(),
@@ -138,6 +138,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // WebView
     let webView = WKWebView(frame: window.frame)
     webView.allowsBackForwardNavigationGestures = true
+    webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
+    
     window.contentView = webView
     // use custom user agent to improve website compatibility
     if #available(macOS 10.11, *) {
