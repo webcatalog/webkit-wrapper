@@ -1,0 +1,5 @@
+dist
+.build
+.DS_Store
+yarn-error.log
+node_modules
