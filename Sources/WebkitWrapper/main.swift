@@ -62,9 +62,18 @@ class WindowDelegate: NSObject, NSWindowDelegate {
   }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDelegate {
   let window = NSWindow()
   let windowDelegate = WindowDelegate()
+
+  func webView(_: WKWebView, createWebViewWith: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+    // If the target of the navigation is a new window, this property is nil
+    // https://developer.apple.com/documentation/webkit/wknavigationaction/1401918-targetframe
+    if (navigationAction.targetFrame == nil) {
+      NSWorkspace.shared.open(navigationAction.request.url!) // open in default browser
+    }
+    return nil
+  }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     // Disable tabbing mode introduced in macOS 10.12
@@ -137,6 +146,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // WebView
     let webView = WKWebView(frame: window.frame)
+    webView.navigationDelegate = self
+    webView.uiDelegate = self
     webView.allowsBackForwardNavigationGestures = true
     webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
     
