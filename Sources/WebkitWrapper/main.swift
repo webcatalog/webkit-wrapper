@@ -205,6 +205,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
     NSApp.setActivationPolicy(.regular)
     NSApp.activate(ignoringOtherApps: true)
   }
+
+  func application(_ application: NSApplication, open urls: [URL]) {
+		guard
+			urls.count == 1,
+			let webUrl = urls.first
+		else {
+      let alert = NSAlert()
+      alert.informativeText = "The app can only open one URL at the time."
+      alert.runModal()
+			return
+		}
+
+    WKWebView.load(!webUrl)
+	}
 }
 
 let app = NSApplication.shared
