@@ -54,6 +54,45 @@ extension WKWebView {
   @objc func goHome(_: Any? = nil) {
     self.load(URLRequest(url: jsonData.url!))
   }
+  private func setZoom(_ rhs: String) {
+    let js = """
+      var zoom = document.body.style.zoom || 1;
+      document.body.style.zoom = \(rhs);
+    """
+    self.evaluateJavaScript(js) { 
+      (result, error) in
+        if let _ = result,
+        let zoom = result! as? Double,
+        let webviewZoomKey = self.webviewZoomKey() {
+          UserDefaults.standard.set(zoom, forKey: webviewZoomKey)
+        }
+    }
+  }
+
+  func setDefaultZoom() {
+    guard let webviewZoomKey = self.webviewZoomKey() else { return }
+    switch UserDefaults.standard.double(forKey: webviewZoomKey) {
+      case 0: return
+      case let zoom: setZoom(zoom.description)
+    }
+  }
+
+  @objc func actualSize(_: Any? = nil) {
+    setZoom("1")
+  }
+
+  @objc func zoomIn(_: Any? = nil) {
+    setZoom("zoom * 1.1")
+  }
+
+  @objc func zoomOut(_: Any? = nil) {
+    setZoom("zoom / 1.1")
+  }
+
+  private func webviewZoomKey() -> String? {
+    // remember zoom setting per each hostname
+    self.url?.host.map { "webview-zoom:\($0)" }
+  }
 }
 
 class WindowDelegate: NSObject, NSWindowDelegate {
@@ -110,7 +149,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
     let viewMenu = NSMenuItem()
     viewMenu.submenu = NSMenu(title: "View")
     viewMenu.submenu?.items = [
-      NSMenuItem(title: "Reload This Page", action: #selector(WKWebView.reload(_:)), keyEquivalent: "r")
+      NSMenuItem(title: "Reload This Page", action: #selector(WKWebView.reload(_:)), keyEquivalent: "r"),
+      NSMenuItem.separator(),
+      NSMenuItem(title: "Actual Size", action: #selector(WKWebView.actualSize(_:)), keyEquivalent: "0"),
+      NSMenuItem(title: "Zoom In", action: #selector(WKWebView.zoomIn(_:)), keyEquivalent: "+"),
+      NSMenuItem(title: "Zoom Out", action: #selector(WKWebView.zoomOut(_:)), keyEquivalent: "-")
     ]
     mainMenu.addItem(viewMenu)
 
