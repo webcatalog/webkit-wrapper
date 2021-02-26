@@ -149,6 +149,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
 
     let viewMenu = NSMenuItem()
     viewMenu.submenu = NSMenu(title: "View")
+
+    let fullScreenMenuItem = NSMenuItem(title: "Toggle Full Screen", action: #selector(NSWindow.toggleFullScreen(_:)), keyEquivalent: "f")
+    fullScreenMenuItem.keyEquivalentModifierMask = [.command, .control]
+
     viewMenu.submenu?.items = [
       NSMenuItem(title: "Reload This Page", action: #selector(WKWebView.reload(_:)), keyEquivalent: "r"),
       NSMenuItem.separator(),
