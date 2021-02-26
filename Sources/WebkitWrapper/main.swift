@@ -154,7 +154,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
       NSMenuItem.separator(),
       NSMenuItem(title: "Actual Size", action: #selector(WKWebView.actualSize(_:)), keyEquivalent: "0"),
       NSMenuItem(title: "Zoom In", action: #selector(WKWebView.zoomIn(_:)), keyEquivalent: "+"),
-      NSMenuItem(title: "Zoom Out", action: #selector(WKWebView.zoomOut(_:)), keyEquivalent: "-")
+      NSMenuItem(title: "Zoom Out", action: #selector(WKWebView.zoomOut(_:)), keyEquivalent: "-"),
+      NSMenuItem.separator(),
+      fullScreenMenuItem
     ]
     mainMenu.addItem(viewMenu)
 
