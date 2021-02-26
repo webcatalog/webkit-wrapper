@@ -54,6 +54,7 @@ extension WKWebView {
   @objc func goHome(_: Any? = nil) {
     self.load(URLRequest(url: jsonData.url!))
   }
+
   private func setZoom(_ rhs: String) {
     let js = """
       var zoom = document.body.style.zoom || 1;
