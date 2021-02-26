@@ -105,6 +105,8 @@ class WindowDelegate: NSObject, NSWindowDelegate {
 class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDelegate {
   let window = NSWindow()
   let windowDelegate = WindowDelegate()
+  let webView = WKWebView(frame: .zero)
+  var didHandleHTTPProtocol = false
 
   func webView(_: WKWebView, createWebViewWith: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
     // If the target of the navigation is a new window, this property is nil
@@ -189,7 +191,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
     window.makeKeyAndOrderFront(window)
     
     // WebView
-    let webView = WKWebView(frame: window.frame)
     webView.navigationDelegate = self
     webView.uiDelegate = self
     webView.allowsBackForwardNavigationGestures = true
@@ -200,11 +201,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
     if #available(macOS 10.11, *) {
       webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15"
     }
-    webView.load(URLRequest(url: jsonData.url!))
+    if (!didHandleHTTPProtocol) {
+      webView.load(URLRequest(url: jsonData.url!))
+    }
   
     NSApp.setActivationPolicy(.regular)
     NSApp.activate(ignoringOtherApps: true)
   }
+
+  func application(_ application: NSApplication, open urls: [URL]) {
+		guard
+			urls.count == 1,
+			let firstUrl = urls.first
+		else {
+      let alert = NSAlert()
+      alert.informativeText = "The app can only open one URL at the time."
+      alert.runModal()
+			return
+		}
+
+    didHandleHTTPProtocol = true
+    webView.load(URLRequest(url: firstUrl))
+	}
 }
 
 let app = NSApplication.shared
