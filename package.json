@@ -2,6 +2,7 @@
   "name": "webkit-wrapper",
   "version": "2.0.0",
   "minimumWebCatalogVersion": "29.0.0",
+  "minimumChromelessVersion": "1.0.0",
   "main": "package.js",
   "repository": "https://github.com/webcatalog/webkit-wrapper.git",
   "author": "Quang Lam <quang.lam@webcatalog.app>",
