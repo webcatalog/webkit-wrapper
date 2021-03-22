@@ -16,10 +16,10 @@ Promise.resolve()
     console.log(`Generating ${TEMPLATE_JSON_PATH}...`);
     fs.ensureFileSync(TEMPLATE_JSON_PATH);
     const sha256 = await hasha.fromFile(TEMPLATE_ZIP_PATH, { algorithm: 'sha256' });
-    const { version, minimumWebCatalogVersion } = packageJson;
+    const { version, minimumChromelessVersion } = packageJson;
     fs.writeJSONSync(TEMPLATE_JSON_PATH, {
       version,
-      minimumWebCatalogVersion,
+      minimumChromelessVersion,
       sha256,
       zipFileName,
       downloadUrl: `https://github.com/webcatalog/webkit-wrapper/releases/download/v${version}/${zipFileName}`,
