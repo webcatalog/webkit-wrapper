@@ -1,6 +1,6 @@
 {
   "name": "webkit-wrapper",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "minimumChromelessVersion": "1.0.0",
   "main": "package.js",
   "repository": "https://github.com/webcatalog/webkit-wrapper.git",
